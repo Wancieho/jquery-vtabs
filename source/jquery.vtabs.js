@@ -50,13 +50,15 @@
 			$(this.element).find('a').on('click', function (e) {
 				e.preventDefault();
 
-				$.each($(scope.element).find('li'), function () {
-					$(this).removeClass('active');
-					$($(this).find('a').attr('href')).hide();
-				});
+				if ($($(this).attr('href')).is(':hidden')) {
+					$.each($(scope.element).find('li'), function () {
+						$(this).removeClass('active');
+						$($(this).find('a').attr('href')).hide();
+					});
 
-				$(this).parent().addClass('active');
-				$($(this).attr('href')).fadeIn();
+					$(this).parent().addClass('active');
+					$($(this).attr('href')).fadeIn();
+				}
 			});
 		}
 	});
