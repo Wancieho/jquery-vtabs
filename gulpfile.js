@@ -1,6 +1,17 @@
 var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
+var strip = require('gulp-strip-comments');
+var header = require('gulp-header');
+var license = '/*\n' +
+		' * Project: vTabs\n' +
+		' * Description: Simplistic and unstyled tabs\n' +
+		' * Author: https://github.com/Wancieho\n' +
+		' * License: MIT\n' +
+		' * Version: 0.1.1\n' +
+		' * Dependancies: jquery-1.*\n' +
+		' * Date: 10/02/2016\n' +
+		' */\n';
 
 gulp.task('default', [
 	'copy',
