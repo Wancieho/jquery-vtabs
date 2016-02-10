@@ -1,13 +1,3 @@
-/*
- * Project: vTabs
- * Description: Simplistic and unstyled tabs
- * Author: Vaughan Webber - https://github.com/Wancieho
- * License: MIT
- * Version: 0.0.1
- * Dependancies: jquery-1.11.2
- * Date: 30/09/2015
- */
-
 ;
 (function ($, window, document, undefined) {
 	'use strict';

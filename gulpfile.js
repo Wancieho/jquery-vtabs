@@ -20,12 +20,15 @@ gulp.task('default', [
 
 gulp.task('copy', function () {
 	return gulp.src('source/jquery.vtabs.js')
+			.pipe(strip())
+			.pipe(header(license))
 			.pipe(gulp.dest('dist'));
 });
 
 gulp.task('minify', function () {
 	return gulp.src('source/jquery.vtabs.js')
 			.pipe(uglify())
+			.pipe(header(license))
 			.pipe(rename('jquery.vtabs.min.js'))
 			.pipe(gulp.dest('dist'));
 });
