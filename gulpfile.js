@@ -8,7 +8,7 @@ var license = '/*\n' +
 		' * Description: Simplistic and unstyled tabs\n' +
 		' * Author: https://github.com/Wancieho\n' +
 		' * License: MIT\n' +
-		' * Version: 0.1.1\n' +
+		' * Version: 0.1.2\n' +
 		' * Dependancies: jquery-1.*\n' +
 		' * Date: 10/02/2016\n' +
 		' */\n';

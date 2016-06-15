@@ -3,70 +3,80 @@
  * Description: Simplistic and unstyled tabs
  * Author: https://github.com/Wancieho
  * License: MIT
- * Version: 0.1.1
+ * Version: 0.1.2
  * Dependancies: jquery-1.*
  * Date: 10/02/2016
  */
 ;
-(function ($, window, document, undefined) {
+(function ($) {
 	'use strict';
 
 	var pluginName = 'vTabs';
+	var instance = null;
 
 	function vTabs(element) {
+		instance = this;
 		this.element = element;
 
-		this.__construct();
+		setup();
+		events();
 	}
 
-	$.extend(vTabs.prototype, {
-		__construct: function () {
-			this.setup();
-			this.events();
-		},
-		setup: function () {
-			var tabControlIsActive = false;
+	$.extend(vTabs.prototype, {});
 
-			$.each($(this.element).find('li'), function () {
-				if ($(this).hasClass('active')) {
-					tabControlIsActive = true;
-				}
+	function setup() {
+		var tabControlIsActive = false;
+
+		$.each($(instance.element).find('li'), function () {
+			if ($(this).hasClass('active')) {
+				tabControlIsActive = true;
+			}
+		});
+
+		if (!tabControlIsActive) {
+			$(instance.element).find('li:first-child').addClass('active');
+
+			$.each($(instance.element).find('li'), function () {
+				$($(this).find('a').attr('href')).invisible();
 			});
 
-			if (!tabControlIsActive) {
-				$(this.element).find('li:first-child').addClass('active');
+			$($(instance.element).find('li:first-child').find('a').attr('href')).visible();
+		}
+	}
 
-				$.each($(this.element).find('li'), function () {
-					$($(this).find('a').attr('href')).hide();
+	function events() {
+		$(instance.element).find('a').on('click', function (e) {
+			e.preventDefault();
+
+			if ($($(this).attr('href')).css('visibility') === 'hidden') {
+				$.each($(instance.element).find('li'), function () {
+					$(this).removeClass('active');
+					$($(this).find('a').attr('href')).invisible().height(0);
 				});
 
-				$($(this.element).find('li:first-child').find('a').attr('href')).show();
+				$(this).parent().addClass('active');
+				$($(this).attr('href')).visible().hide().fadeIn();
 			}
-		},
-		events: function () {
-			var scope = this;
+		});
+	}
 
-			$(this.element).find('a').on('click', function (e) {
-				e.preventDefault();
+	$.fn.invisible = function () {
+		return this.each(function () {
+			$(this).css('visibility', 'hidden');
+		});
+	};
 
-				if ($($(this).attr('href')).is(':hidden')) {
-					$.each($(scope.element).find('li'), function () {
-						$(this).removeClass('active');
-						$($(this).find('a').attr('href')).hide();
-					});
-
-					$(this).parent().addClass('active');
-					$($(this).attr('href')).fadeIn();
-				}
-			});
-		}
-	});
+	$.fn.visible = function () {
+		return this.each(function () {
+			$(this).css('visibility', 'visible');
+		});
+	};
 
 	$.fn[pluginName] = function () {
 		return this.each(function () {
-			if (!$.data(this, "plugin_" + pluginName)) {
+			if (!$.data(this, 'plugin_' + pluginName)) {
 				new vTabs(this);
 			}
 		});
 	};
-})(jQuery, window, document);
+})(jQuery);
