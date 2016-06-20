@@ -15,11 +15,28 @@
 	var instance = null;
 
 	function vTabs(element) {
-		instance = this;
-		this.element = element;
+		if (instance === null) {
+			instance = this;
+			this.element = element;
 
-		setup();
-		events();
+			setup();
+			events();
+		}
+		else {
+			$.each($(instance.element).find('li'), function () {
+				$($(this).find('a').attr('href')).invisible().height(0);
+
+				if ($(this).hasClass('active')) {
+					$(this).removeClass('active');
+				}
+
+				if ($(this).find('a').attr('href') === '#' + element.id) {
+					$(this).addClass('active');
+
+					$($(this).find('a').attr('href')).visible().hide().fadeIn().height('auto');
+				}
+			});
+		}
 	}
 
 	$.extend(vTabs.prototype, {});
@@ -37,10 +54,10 @@
 			$(instance.element).find('li:first-child').addClass('active');
 
 			$.each($(instance.element).find('li'), function () {
-				$($(this).find('a').attr('href')).invisible();
+				$($(this).find('a').attr('href')).invisible().height(0);
 			});
 
-			$($(instance.element).find('li:first-child').find('a').attr('href')).visible();
+			$($(instance.element).find('li:first-child').find('a').attr('href')).visible().hide().fadeIn().height('auto');
 		}
 	}
 
@@ -55,7 +72,7 @@
 				});
 
 				$(this).parent().addClass('active');
-				$($(this).attr('href')).visible().hide().fadeIn();
+				$($(this).attr('href')).visible().hide().fadeIn().height('auto');
 			}
 		});
 	}
