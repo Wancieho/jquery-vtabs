@@ -6,7 +6,10 @@
         <script src="../source/jquery.vtabs.js" type="text/javascript"></script>
         <script type="text/javascript">
 			$(document).ready(function () {
+//				$('#vTabs').vTabs({activeTab: 2});
+
 				$('#vTabs').vTabs();
+				$('#vTabs').data('plugin_vTabs').activateTab('#tab2');
 			});
         </script>
         <style type="text/css">
