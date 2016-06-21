@@ -3,7 +3,7 @@
  * Description: Simplistic and unstyled tabs
  * Author: https://github.com/Wancieho
  * License: MIT
- * Version: 0.2.0
+ * Version: 0.3.0
  * Dependancies: jquery-1.*
  * Date: 21/06/2016
  */
