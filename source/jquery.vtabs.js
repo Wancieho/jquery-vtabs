@@ -3,61 +3,45 @@
 	'use strict';
 
 	var pluginName = 'vTabs';
+	var defaults = {
+		activeTab: 0
+	};
 	var instance = null;
 
-	function vTabs(element) {
-		if (instance === null) {
-			instance = this;
-			this.element = element;
+	function vTabs(element, options) {
+		instance = this;
+		instance.element = element;
+		instance.settings = $.extend({}, defaults, options);
 
-			setup();
-			events();
-		}
-		else {
+		events();
+		instance.activateTab(this.settings.activeTab);
+	}
+
+	//public methods
+	$.extend(vTabs.prototype, {
+		activateTab: function (id) {
 			$.each($(instance.element).find('li'), function () {
 				//hide all div content
-				$($(this).find('a').attr('href')).invisible().height(0);
+				$($(this).find('a').attr('href')).invisible();
 
 				//remove href active
 				if ($(this).hasClass('active')) {
 					$(this).removeClass('active');
 				}
-
-				//activate element href
-				if ($(this).find('a').attr('href') === '#' + element.id) {
-					$(this).addClass('active');
-
-					//display selected anchors href DOM element
-					$($(this).find('a').attr('href')).visible().hide().fadeIn().height('auto');
-				}
 			});
-		}
-	}
 
-	//public methods
-	$.extend(vTabs.prototype, {});
+			var li = id !== parseInt(id) ? $(instance.element).find('a[href="' + id + '"]').parent() : $(instance.element).find('li').eq(id);
+
+			if (li.length === 0) {
+				li = $(instance.element).find('li').eq(0);
+			}
+
+			//display selected anchors href DOM element
+			$(li.addClass('active').find('a').attr('href')).visible().hide().fadeIn();
+		}
+	});
 
 	//private methods
-	function setup() {
-		var tabControlIsActive = false;
-
-		$.each($(instance.element).find('li'), function () {
-			if ($(this).hasClass('active')) {
-				tabControlIsActive = true;
-			}
-		});
-
-		if (!tabControlIsActive) {
-			$(instance.element).find('li:first-child').addClass('active');
-
-			$.each($(instance.element).find('li'), function () {
-				$($(this).find('a').attr('href')).invisible().height(0);
-			});
-
-			$($(instance.element).find('li:first-child').find('a').attr('href')).visible().hide().fadeIn().height('auto');
-		}
-	}
-
 	function events() {
 		$(instance.element).find('a').on('click', function (e) {
 			e.preventDefault();
@@ -67,33 +51,33 @@
 				$.each($(instance.element).find('li'), function () {
 					$(this).removeClass('active');
 					//hide all href anchor DOM elements
-					$($(this).find('a').attr('href')).invisible().height(0);
+					$($(this).find('a').attr('href')).invisible();
 				});
 
 				$(this).parent().addClass('active');
 				//display clicked anchors href DOM element
-				$($(this).attr('href')).visible().hide().fadeIn().height('auto');
+				$($(this).attr('href')).visible().hide().fadeIn();
 			}
 		});
 	}
 
 	//inject jQuery methods
-	$.fn.invisible = function () {
-		return this.each(function () {
-			$(this).css('visibility', 'hidden');
-		});
-	};
-
 	$.fn.visible = function () {
 		return this.each(function () {
-			$(this).css('visibility', 'visible');
+			$(this).css('visibility', 'visible').height('auto');
 		});
 	};
 
-	$.fn[pluginName] = function () {
+	$.fn.invisible = function () {
+		return this.each(function () {
+			$(this).css('visibility', 'hidden').height(0);
+		});
+	};
+
+	$.fn[pluginName] = function (options) {
 		return this.each(function () {
 			if (!$.data(this, 'plugin_' + pluginName)) {
-				new vTabs(this);
+				$.data(this, 'plugin_' + pluginName, new vTabs(this, options));
 			}
 		});
 	};

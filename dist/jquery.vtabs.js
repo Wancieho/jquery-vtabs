@@ -12,54 +12,39 @@
 	'use strict';
 
 	var pluginName = 'vTabs';
+	var defaults = {
+		activeTab: 0
+	};
 	var instance = null;
 
-	function vTabs(element) {
-		if (instance === null) {
-			instance = this;
-			this.element = element;
+	function vTabs(element, options) {
+		instance = this;
+		instance.element = element;
+		instance.settings = $.extend({}, defaults, options);
 
-			setup();
-			events();
-		}
-		else {
+		events();
+		instance.activateTab(this.settings.activeTab);
+	}
+
+	$.extend(vTabs.prototype, {
+		activateTab: function (id) {
 			$.each($(instance.element).find('li'), function () {
-				$($(this).find('a').attr('href')).invisible().height(0);
+				$($(this).find('a').attr('href')).invisible();
 
 				if ($(this).hasClass('active')) {
 					$(this).removeClass('active');
 				}
-
-				if ($(this).find('a').attr('href') === '#' + element.id) {
-					$(this).addClass('active');
-
-					$($(this).find('a').attr('href')).visible().hide().fadeIn().height('auto');
-				}
 			});
-		}
-	}
 
-	$.extend(vTabs.prototype, {});
+			var li = id !== parseInt(id) ? $(instance.element).find('a[href="' + id + '"]').parent() : $(instance.element).find('li').eq(id);
 
-	function setup() {
-		var tabControlIsActive = false;
-
-		$.each($(instance.element).find('li'), function () {
-			if ($(this).hasClass('active')) {
-				tabControlIsActive = true;
+			if (li.length === 0) {
+				li = $(instance.element).find('li').eq(0);
 			}
-		});
 
-		if (!tabControlIsActive) {
-			$(instance.element).find('li:first-child').addClass('active');
-
-			$.each($(instance.element).find('li'), function () {
-				$($(this).find('a').attr('href')).invisible().height(0);
-			});
-
-			$($(instance.element).find('li:first-child').find('a').attr('href')).visible().hide().fadeIn().height('auto');
+			$(li.addClass('active').find('a').attr('href')).visible().hide().fadeIn();
 		}
-	}
+	});
 
 	function events() {
 		$(instance.element).find('a').on('click', function (e) {
@@ -68,31 +53,31 @@
 			if ($($(this).attr('href')).css('visibility') === 'hidden') {
 				$.each($(instance.element).find('li'), function () {
 					$(this).removeClass('active');
-					$($(this).find('a').attr('href')).invisible().height(0);
+					$($(this).find('a').attr('href')).invisible();
 				});
 
 				$(this).parent().addClass('active');
-				$($(this).attr('href')).visible().hide().fadeIn().height('auto');
+				$($(this).attr('href')).visible().hide().fadeIn();
 			}
 		});
 	}
 
-	$.fn.invisible = function () {
-		return this.each(function () {
-			$(this).css('visibility', 'hidden');
-		});
-	};
-
 	$.fn.visible = function () {
 		return this.each(function () {
-			$(this).css('visibility', 'visible');
+			$(this).css('visibility', 'visible').height('auto');
 		});
 	};
 
-	$.fn[pluginName] = function () {
+	$.fn.invisible = function () {
+		return this.each(function () {
+			$(this).css('visibility', 'hidden').height(0);
+		});
+	};
+
+	$.fn[pluginName] = function (options) {
 		return this.each(function () {
 			if (!$.data(this, 'plugin_' + pluginName)) {
-				new vTabs(this);
+				$.data(this, 'plugin_' + pluginName, new vTabs(this, options));
 			}
 		});
 	};
