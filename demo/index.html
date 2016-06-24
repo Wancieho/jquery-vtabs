@@ -6,10 +6,23 @@
         <script src="../source/jquery.vtabs.js" type="text/javascript"></script>
         <script type="text/javascript">
 			$(document).ready(function () {
-//				$('#vTabs').vTabs({activeTab: 2});
+				$('.vTabs').vTabs();
 
-				$('#vTabs').vTabs();
-				$('#vTabs').data('plugin_vTabs').activateTab('#tab2');
+				// 1. initialize and select tab 2
+//				$('.vTabs').vTabs({activeTab: 2});
+
+				// 2. initialize and don't select any tab
+//				$('.vTabs').vTabs({active: false});
+
+				// 3. inititialize with defaults
+//				$('.vTabs').vTabs();
+
+				// 4. only once initialized with defaults
+//				$('.vTabs').data('plugin_vTabs').activateTab('#tab2');
+
+				//assign active tab through public method and then reset + hide everything
+				$('.vTabs').data('plugin_vTabs').activateTab('#tab2');
+				$('.vTabs').data('plugin_vTabs').reset(true);
 			});
         </script>
         <style type="text/css">
@@ -18,12 +31,11 @@
                 font-size: 14px;
             }
 
-			#tab2,
-			#tab3{
+			body > div{
 				display: none;
 			}
 
-			#vTabs{
+			.vTabs{
 				margin: 0;
 				padding: 0;
 				list-style: none;
@@ -31,12 +43,12 @@
 				overflow: auto;
 			}
 
-			#vTabs li{
+			.vTabs li{
 				float: left;
 				margin-right: 5px;
 			}
 
-			#vTabs li a{
+			.vTabs li a{
 				display: inline-block;
 				padding: 3px 5px;
 				color: gray;
@@ -44,14 +56,14 @@
 				background: lightgray;
 			}
 
-			#vTabs li.active a{
+			.vTabs li.active a{
 				color: white;
 				background: dodgerblue;
 			}
         </style>
     </head>
     <body>
-		<ul id="vTabs">
+		<ul class="vTabs">
 			<li>
 				<a href="#tab1">Tab One</a>
 			</li>
