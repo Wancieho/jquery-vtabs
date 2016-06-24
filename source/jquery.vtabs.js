@@ -1,3 +1,13 @@
+/*
+ * TODO:
+ * 
+ * CTRL + mouse click = deselect
+ * public method deactivate to disable plugin (destroy?)
+ * injected jQuery methods may conflict if declared in a project using this plugin?
+ * check for duplicate IDs and [*="#*"] on page and throw console error
+ * should all [*="#*"] be anchors?
+ */
+
 ;
 (function ($) {
 	'use strict';
@@ -10,6 +20,7 @@
 	var instance = null;
 
 	function vTabs(element, options) {
+		console.debug('instantiate');
 		instance = this;
 		instance.element = element;
 		instance.settings = $.extend({}, defaults, options);
@@ -61,6 +72,7 @@
 	//private methods
 	function events() {
 		$(instance.element).find('a').on('click', function (e) {
+			console.debug($(instance.element));
 			e.preventDefault();
 
 			//used clicked anchor href to check if DOM element is visible
@@ -81,17 +93,18 @@
 	//inject jQuery methods
 	$.fn.visible = function () {
 		return this.each(function () {
-			$(this).css('visibility', 'visible').height('auto');
+			$(this).css('visibility', 'visible').css('overflow', 'auto').height('auto');
 		});
 	};
 
 	$.fn.invisible = function () {
 		return this.each(function () {
-			$(this).css('visibility', 'hidden').height(0);
+			$(this).css('visibility', 'hidden').css('overflow', 'hidden').height(0);
 		});
 	};
 
 	$.fn[pluginName] = function (options) {
+		console.debug(this);
 		return this.each(function () {
 			if (!$.data(this, 'plugin_' + pluginName)) {
 				$.data(this, 'plugin_' + pluginName, new vTabs(this, options));
