@@ -5,12 +5,12 @@ var strip = require('gulp-strip-comments');
 var header = require('gulp-header');
 var license = '/*\n' +
 		' * Project: vTabs\n' +
-		' * Description: Simplistic and unstyled tabs\n' +
+		' * Description: A simplistic un-styled jQuery tab plug-in\n' +
 		' * Author: https://github.com/Wancieho\n' +
 		' * License: MIT\n' +
-		' * Version: 0.3.1\n' +
+		' * Version: 0.4.0\n' +
 		' * Dependancies: jquery-1.*\n' +
-		' * Date: 21/06/2016\n' +
+		' * Date: 24/06/2016\n' +
 		' */\n';
 
 gulp.task('default', [
