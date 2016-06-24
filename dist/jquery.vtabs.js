@@ -13,7 +13,8 @@
 
 	var pluginName = 'vTabs';
 	var defaults = {
-		activeTab: 0
+		activeTab: 0,
+		active: true
 	};
 	var instance = null;
 
@@ -28,21 +29,36 @@
 
 	$.extend(vTabs.prototype, {
 		activateTab: function (id) {
+			if (instance.settings.active) {
+				$.each($(instance.element).find('li'), function () {
+					$($(this).find('a').attr('href')).invisible();
+
+					if ($(this).hasClass('active')) {
+						$(this).removeClass('active');
+					}
+				});
+
+				var li = id !== parseInt(id) ? $(instance.element).find('a[href="' + id + '"]').parent() : $(instance.element).find('li').eq(id);
+
+				if (li.length === 0) {
+					li = $(instance.element).find('li').eq(0);
+				}
+
+				$(li.addClass('active').find('a').attr('href')).visible().hide().fadeIn();
+			} else {
+				instance.reset(true);
+			}
+		},
+		reset: function (hideFirst) {
+			$(instance.element).find('li').removeClass('active');
+
 			$.each($(instance.element).find('li'), function () {
 				$($(this).find('a').attr('href')).invisible();
-
-				if ($(this).hasClass('active')) {
-					$(this).removeClass('active');
-				}
 			});
 
-			var li = id !== parseInt(id) ? $(instance.element).find('a[href="' + id + '"]').parent() : $(instance.element).find('li').eq(id);
-
-			if (li.length === 0) {
-				li = $(instance.element).find('li').eq(0);
+			if (!hideFirst) {
+				$($(instance.element).find('li').eq(0).addClass('active').find('a').attr('href')).visible();
 			}
-
-			$(li.addClass('active').find('a').attr('href')).visible().hide().fadeIn();
 		}
 	});
 
