@@ -3,10 +3,11 @@
  * Description: Simplistic and unstyled tabs
  * Author: https://github.com/Wancieho
  * License: MIT
- * Version: 0.3.0
+ * Version: 0.4.0
  * Dependancies: jquery-1.*
  * Date: 21/06/2016
  */
+
 ;
 (function ($) {
 	'use strict';
@@ -16,21 +17,24 @@
 		activeTab: 0,
 		active: true
 	};
-	var instance = null;
 
 	function vTabs(element, options) {
-		instance = this;
-		instance.element = element;
-		instance.settings = $.extend({}, defaults, options);
+		this.element = element;
+		this.settings = $.extend({}, defaults, options);
 
-		events();
-		instance.activateTab(this.settings.activeTab);
+		this.privateMethodScopeAssignment();
+		this.activateTab(this.settings.activeTab);
 	}
 
 	$.extend(vTabs.prototype, {
+		privateMethodScopeAssignment: function () {
+			events.apply(this);
+		},
 		activateTab: function (id) {
-			if (instance.settings.active) {
-				$.each($(instance.element).find('li'), function () {
+			var scope = this;
+
+			if (this.settings.active) {
+				$.each($(this.element).find('li'), function () {
 					$($(this).find('a').attr('href')).invisible();
 
 					if ($(this).hasClass('active')) {
@@ -38,36 +42,39 @@
 					}
 				});
 
-				var li = id !== parseInt(id) ? $(instance.element).find('a[href="' + id + '"]').parent() : $(instance.element).find('li').eq(id);
+				var li = id !== parseInt(id) ? $(scope.element).find('a[href="' + id + '"]').parent() : $(scope.element).find('li').eq(id);
 
 				if (li.length === 0) {
-					li = $(instance.element).find('li').eq(0);
+					li = $(scope.element).find('li').eq(0);
 				}
 
 				$(li.addClass('active').find('a').attr('href')).visible().hide().fadeIn();
 			} else {
-				instance.reset(true);
+				scope.reset(true);
 			}
 		},
 		reset: function (hideFirst) {
-			$(instance.element).find('li').removeClass('active');
+			var scope = this;
+			$(this.element).find('li').removeClass('active');
 
-			$.each($(instance.element).find('li'), function () {
+			$.each($(this.element).find('li'), function () {
 				$($(this).find('a').attr('href')).invisible();
 			});
 
 			if (!hideFirst) {
-				$($(instance.element).find('li').eq(0).addClass('active').find('a').attr('href')).visible();
+				$($(scope.element).find('li').eq(0).addClass('active').find('a').attr('href')).visible();
 			}
 		}
 	});
 
 	function events() {
-		$(instance.element).find('a').on('click', function (e) {
+		var scope = this;
+
+		$(this.element).find('a').on('click', function (e) {
 			e.preventDefault();
 
 			if ($($(this).attr('href')).css('visibility') === 'hidden') {
-				$.each($(instance.element).find('li'), function () {
+				$.each($(scope.element).find('li'), function () {
 					$(this).removeClass('active');
 					$($(this).find('a').attr('href')).invisible();
 				});
@@ -80,13 +87,13 @@
 
 	$.fn.visible = function () {
 		return this.each(function () {
-			$(this).css('visibility', 'visible').height('auto');
+			$(this).css('visibility', 'visible').css('overflow', 'auto').height('auto');
 		});
 	};
 
 	$.fn.invisible = function () {
 		return this.each(function () {
-			$(this).css('visibility', 'hidden').height(0);
+			$(this).css('visibility', 'hidden').css('overflow', 'hidden').height(0);
 		});
 	};
 
