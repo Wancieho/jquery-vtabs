@@ -15,7 +15,8 @@
 	var pluginName = 'vTabs';
 	var defaults = {
 		activeTab: 0,
-		active: true
+		active: true,
+		selfClickHide: true
 	};
 
 	function vTabs(element, options) {
@@ -76,11 +77,17 @@
 			if ($($(this).attr('href')).css('visibility') === 'hidden') {
 				$.each($(scope.element).find('li'), function () {
 					$(this).removeClass('active');
+
 					$($(this).find('a').attr('href')).invisible();
 				});
 
 				$(this).parent().addClass('active');
+
 				$($(this).attr('href')).visible().hide().fadeIn();
+			} else if (scope.settings.selfClickHide) {
+				$(this).parent().removeClass('active');
+
+				$($(this).attr('href')).invisible();
 			}
 		});
 	}

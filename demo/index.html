@@ -10,7 +10,7 @@
 					var examples = [
 						{element: '.example1', code: "$('.example1 ul').vTabs();"},
 						{element: '.example2', code: "$('.example2 ul').vTabs({activeTab: 2});"},
-						{element: '.example3', code: "$('.example3 ul').vTabs({active: false});"},
+						{element: '.example3', code: "$('.example3 ul').vTabs({active: false, selfClickHide: false});"},
 						{element: '.example4', code: "$('.example4 ul').vTabs();\n$('.example4 ul').data('plugin_vTabs').activateTab('#the');"},
 						{element: '.example5', code: "$('.example5 ul').vTabs();\n$('.example5 ul').data('plugin_vTabs').activateTab(1);\n$('.example5 ul').data('plugin_vTabs').reset(true);"}
 					];
@@ -28,10 +28,6 @@
                 font-size: 14px;
             }
 
-			body .example > div{
-				display: none;
-			}
-
 			h2{
 				margin: 0;
 			}
@@ -47,6 +43,10 @@
 				margin-bottom: 50px;
 				padding: 10px;
 				border: 1px solid #ccc;
+			}
+
+			.example > div{
+				display: none;
 			}
 
 			.example ul{
@@ -135,14 +135,14 @@
 					<a href="#hide">Hide</a>
 				</li>
 				<li>
-					<a href="#all">All</a>
+					<a href="#self">Self Click</a>
 				</li>
 			</ul>
 			<div id="hide">
-				<p>I am &quot;Hide&quot; and I was hidden.</p>
+				<p>All tabs are hidden and buttons are inactive by default.</p>
 			</div>
-			<div id="all">
-				<p>I am &quot;All&quot; and I was hidden.</p>
+			<div id="self">
+				<p>Clicking a highlighted button doesn't hide a tab or deactivate the button.</p>
 			</div>
 		</div>
 		<div class="example example4">

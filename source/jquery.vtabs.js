@@ -6,6 +6,7 @@
  * injected jQuery methods may conflict if declared in a project using this plugin?
  * check for duplicate IDs and [*="#*"] on page and throw console error
  * should all [*="#*"] be anchors?
+ * !when hiding/displaying tabs rather use data() so that we can slide tabs in/out
  */
 
 ;
@@ -15,7 +16,8 @@
 	var pluginName = 'vTabs';
 	var defaults = {
 		activeTab: 0,
-		active: true
+		active: true,
+		selfClickHide: true
 	};
 
 	function vTabs(element, options) {
@@ -83,18 +85,25 @@
 			if ($($(this).attr('href')).css('visibility') === 'hidden') {
 				$.each($(scope.element).find('li'), function () {
 					$(this).removeClass('active');
+
 					//hide all href anchor DOM elements
 					$($(this).find('a').attr('href')).invisible();
 				});
 
 				$(this).parent().addClass('active');
+
 				//display clicked anchors href DOM element
 				$($(this).attr('href')).visible().hide().fadeIn();
+			} else if (scope.settings.selfClickHide) {
+				$(this).parent().removeClass('active');
+
+				$($(this).attr('href')).invisible();
 			}
 		});
 	}
 
 	//inject jQuery methods
+	//#TODO: make only available to this plugin
 	$.fn.visible = function () {
 		return this.each(function () {
 			$(this).css('visibility', 'visible').css('overflow', 'auto').height('auto');
